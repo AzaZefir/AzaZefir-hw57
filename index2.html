@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hw57</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+
+        .form {
+            margin: 10px;
+        }
+
+        .form label {
+            width: 100px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <div class="form">
+            <label>title</label>
+            <input type="text" name='title'>
+        </div>
+        <div class="form">
+            <label>body</label>
+            <textarea name="body" cols="30" rows="10"></textarea>
+        </div>
+        <div class="form">
+            <input id="btn" type="button" value="reload">
+        </div>
+    </form>
+    <script>
+        /*
+        Задание:
+        Напишите сценарий, который будет обновлять сущность post со свойствами
+        id: 1,
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
+
+        Создайте форму с полем ввода для значения свойства title и полем ввода для значения свойства body
+
+        Значения для свойств title и body получите от пользователя
+        Значения id и userId должны остаться равными 1 и выводить их в форме не нужно.
+        При загрузке сценария заполните форму данными получеными при обработке GET запроса на https://jsonplaceholder.typicode.com/posts/1
+
+        адрес для отправки запроса
+        https://jsonplaceholder.typicode.com/posts/1
+
+        для обновления сущности воспользуйтесь PUT запросом https://jsonplaceholder.typicode.com/posts/1. Обработайте ответ
+        и выведите информацию о ошибке или об успешно завершенной операции.
+        */
+
+        let url = 'https://jsonplaceholder.typicode.com/posts/2'
+        let $btn = document.querySelector('#btn');
+        let form = document.forms[0];
+
+        fetch(url)
+            .then(response => response.json())
+            .then(json => {
+                form.title.value = json.title;
+                form.body.value = json.body;
+            })
+        $btn.addEventListener('click', () => {
+            let bodyObject = {
+                id: 1,
+                userId: 1,
+                title: form.title.value,
+                body: form.body.value
+            }
+            fetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(bodyObject)
+            }).then(response => {
+                if (response.ok) {
+                    console.log(response.json());
+                    alert('data saved')
+                } else {
+                    console.log('error (status code ' + response.status + ')');
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
